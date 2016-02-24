@@ -1,0 +1,45 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html data-ng-app="quoteTool">
+<head>
+    <!-- load bootstrap and font-awesome and main.css -->
+    <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/css/custom.css"/>
+    <link rel="stylesheet" href="assets/libs/font-awesome/css/font-awesome.min.css"/>
+</head>
+
+<body ng-controller="AppController">
+<!-- CONTENT -->
+<div class="container-fluid">
+    <div ng-view></div>
+</div>
+<!-- ANGULAR and UIBootstrap and ng-flow -->
+<script src="assets/libs/angular/angular.min.js"></script>
+<script src="assets/libs/angular/angular-route.js"></script>
+<script src="assets/libs/ui-bootstrap/ui-bootstrap-tpls-0.14.3.min.js"></script>
+<script src="assets/libs/bootstrap-ui-datetime-picker/datetime-picker.js"></script>
+<script src="assets/libs/ment.io-master/dist/mentio.js"></script>
+<!--<script src="assets/libs/locale_pt-pt/angular-locale_pt-pt.js"></script>-->
+<script src="assets/libs/ng-flow/dist/ng-flow-standalone.min.js"></script>
+<script src="assets/libs/ng-currency/dist/ng-currency.min.js"></script>
+<script src="assets/libs/directive-percentage/angular-directive-percentage.js"></script>
+<!-- JQUERY -->
+<script type="text/javascript" src="assets/libs/jquery/jquery.min.js"></script>
+<!-- APP GLOBAL COMPONENTS -->
+<script src="app.js"></script>
+<script src="config.js"></script>
+<script src="route.js"></script>
+<!--Service-->
+<script src="components/preQuote/services/preQuoteService.js"></script>
+<!--Controller-->
+<script src="components/preQuote/controllers/preQuote_controller.js"></script>
+<script src="components/preQuote/controllers/editLabor_controller.js"></script>
+<!--Modal-->
+<script src="components/preQuote/directive/editLabor-modal/editLabor_directive.js"></script>
+<!--Directive-->
+<script src="components/preQuote/directive/noUndefinedDirective.js"></script>
+<!-- JAVASCRIPT -->
+<script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/libs/ngstorage/ngStorage.js"></script>
+</body>
+</html>

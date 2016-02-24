@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote Tool TEST with YII</title>
+</head>
+<body ng-app="quoteTool">
+<image-modal></image-modal>
+<div id="report" ng-init="verifySession()" ng-show="isSession" >
+    <div class="col-lg-12" ng-show="isSession">
+        <div class="header">
+            <h4 class="modal-title">Create Pre-Quote</h4>
+        </div>
+
+        <div class="response-box" ng-if="error">
+            <h4><b>Error occurred while saving</b></h4>
+        </div>
+
+        <div class="response-box" ng-if="success">
+            <h4><i class="fa fa-check-circle-o fa-2x green-icon"></i>
+                <b>Pre-Quote saved with success</b></h4>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-field">
+                <label>Site Name</label> <input class="form-control" type="text">
+            </div>
+            <div class="form-field">
+                <label>Address</label> <input class="form-control" type="text">
+            </div>
+            <div class="form-field">
+                <label>Date</label>
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="dd.MMM.yyyy"
+                           ng-model="date" datepicker-options="dateOptions"
+                           is-open="datePicker.instances[date]"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, date)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+            <div class="form-field">
+                <label>Send to Quotes</label>
+                <select class="form-control">
+                    <option value="" hidden></option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Sales Person</label> <select class="form-control" data-ng-model="person"
+                                                    data-ng-options="choice for choice in persons">
+                <option value="" hidden></option>
+            </select>
+            </div>
+            <div class="form-field">
+                <label>Pre-Sales Person</label> <select class="form-control" data-ng-model="person"
+                                                    data-ng-options="choice for choice in persons">
+                <option value="" hidden></option>
+            </select>
+            </div>
+            <div class="form-field">
+                <label>Reseller Name</label> <input class="form-control" type="text">
+            </div>
+            <div class="form-field">
+                <label>Contact</label> <input class="form-control" type="text">
+            </div>
+            <div class="form-field">
+                <label>Quotes Type</label>
+                <select class="form-control">
+                    <option value="" hidden></option>
+                    <option value="1">Quote</option>
+                    <option value="0">Cost Estimate</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label> SMA Valid Expiry Date</label>
+
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="dd.MMM.yyyy"
+                           ng-model="requestForm[fa.name]"
+                           is-open="datePicker.instances[fa.name]" ng-required=fa.required
+                           close-text="Fechar" current-text="Hoje" clear-text="Limpar"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, fa.name)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+            <!--<div class="form-field">-->
+                <!--<label>SMA Valid Expiry Date</label>-->
+
+                <!--<p class="input-group">-->
+                    <!--<input type="text" class="form-control" uib-datepicker-popup="dd.MM.yyyy"-->
+                           <!--ng-model="SMAdate"-->
+                           <!--is-open="datePicker.instances[SMAdate]" ng-required=fa.required-->
+                           <!--close-text="Fechar" current-text="Hoje" clear-text="Limpar"/>-->
+              <!--<span class="input-group-btn">-->
+                <!--<button type="button" class="btn btn-default" ng-click="datePicker.open($event, SMAdate)"><i-->
+                        <!--class="glyphicon glyphicon-calendar"></i></button>-->
+              <!--</span>-->
+                <!--</p>-->
+            <!--</div>-->
+            <div class="form-field">
+                <label>Applications</label> <input class="form-control" type="text">
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-2">
+            <div class="form-fieldShort">
+                <select class="form-control" ng-model="country">
+                    <option value="" hidden>Select Country</option>
+                    <option value="1">Canada</option>
+                    <option value="0">USA</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="buttonSave" align="right">
+                <button class="buttonText btn btn-primary" ng-click="saveQuote(rows,training)">Save</button>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="totalTable">
+                <table class=" estimate table table-hover table-bordered table-condensed">
+                    <tr>
+                        <th colspan="2" rowspan="2">
+                            ESTIMATES
+                        </th>
+                        <th colspan="4">DISCOUNTS</th>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <th style="width: 100px;">Apply</th>
+                        <th style="width: 120px;">Discount lump</th>
+                        <th style="width: 100px;">Discount %</th>
+                    </tr>
+                    <tr>
+                        <td ng-class="{discount: discSVCInclude==1}"><b>Total Pro SVC</b></td>
+                        <td ng-class="{discount: discSVCInclude==1}">{{SVCTotal()|currency}}</td>
+                        <td><b>{{discSVCAmount()|currency}}</b></td>
+                        <td><select class="form-control" ng-model="discSVCInclude">
+                            <option value="" hidden></option>
+                            <option value="1" selected="selected">Yes</option>
+                            <option value="0" >No</option>
+                        </select></td>
+                        <td><input class="form-control"
+                                   ng-model="discSVC" ng-currency>
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                   ng-model="discSVCPercent" percentage></td>
+                    </tr>
+                    <tr>
+                        <td ng-class="{discount: discSoftwareInclude==1}"><b>Total Software</b></td>
+                        <td ng-class="{discount: discSoftwareInclude==1}">{{softwareTotal ()|currency}}</td>
+                        <td><b>{{discSoftwareAmount()|currency}}</b></td>
+                        <td><select class="form-control" ng-model="discSoftwareInclude">
+                            <option value="" hidden></option>
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
+                        </select></td>
+                        <td><input class="form-control"
+                                   ng-model="discSoftware" ng-currency></td>
+                        <td><input class="form-control"
+                                   ng-model="discSoftwarePercent" percentage></td>
+                    </tr>
+                    <tr>
+                        <td ng-class="{discount: discThirdPartyInclude==1}"><b>3rd Party</b></td>
+                        <td ng-class="{discount: discThirdPartyInclude==1}">{{thirdPartyTotal()|currency}}</td>
+                        <td><b>{{discThirdPartyAmount()|currency}}</b></td>
+                        <td><select class="form-control" ng-model="discThirdPartyInclude">
+                            <option value="" hidden></option>
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
+                        </select></td>
+                        <td><input class="form-control"
+                                   ng-model="discThirdParty" ng-currency></td>
+                        <td><input class="form-control"
+                                   ng-model="discThirdPartyPercent" percentage></td>
+                    </tr>
+                    <tr>
+                        <td ng-class="{discount: discSMAInclude==1}"><b>SMA</b></td>
+                        <td ng-class="{discount: discSMAInclude==1}">{{smaTotal()|currency}}</td>
+                        <td><b>{{discSMAAmount()|currency}}</b></td>
+                        <td><select class="form-control" ng-model="discSMAInclude">
+                            <option value="" hidden></option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select></td>
+                        <td><input class="form-control"
+                                   ng-model="discSMA" ng-currency></td>
+                        <td><input class="form-control"
+                                   ng-model="discSMAPercent" percentage></td>
+                    </tr>
+                    <tr>
+                        <td><b>Travel and Living</b></td>
+                        <td><input class="form-control"
+                                   ng-model="travel_living" ng-currency></td>
+                        <td class="travel" colspan="4">{{visitPrice()}} <span ng-show="liveTravel==0">{{visitDays()}}</span></td>
+                    </tr>
+                    <tr>
+                        <td><b>Grand Total</b></td>
+                        <td><b>{{grandTotal()|currency}}</b></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!--<div class="col-lg-5">-->
+        <!--<div class="totalTable">-->
+        <!--<table class=" estimate table table-hover table-bordered table-condensed">-->
+        <!--<tr>-->
+        <!--<th><b>Amount</b></th>-->
+        <!--<th>Apply</th>-->
+        <!--<th>Discount lump</th>-->
+        <!--<th>Discount %</th>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><b>$$$</b></td>-->
+        <!--<td><select class="form-control" ng-model="discSVCInclude">-->
+        <!--<option value="" hidden></option>-->
+        <!--<option value="1">Yes</option>-->
+        <!--<option value="0">No</option>-->
+        <!--</select></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVC" ng-currency></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVCpercent" ></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><b>$$$</b></td>-->
+        <!--<td><select class="form-control" ng-model="discSVCInclude">-->
+        <!--<option value="" hidden></option>-->
+        <!--<option value="1">Yes</option>-->
+        <!--<option value="0">No</option>-->
+        <!--</select></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVC" ng-currency></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVCpercent" ></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><b>$$$</b></td>-->
+        <!--<td><select class="form-control" ng-model="discSVCInclude">-->
+        <!--<option value="" hidden></option>-->
+        <!--<option value="1">Yes</option>-->
+        <!--<option value="0">No</option>-->
+        <!--</select></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVC" ng-currency></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVCpercent"></td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+        <!--<td><b>$$$</b></td>-->
+        <!--<td><select class="form-control" ng-model="discSVCInclude">-->
+        <!--<option value="" hidden></option>-->
+        <!--<option value="1">Yes</option>-->
+        <!--<option value="0">No</option>-->
+        <!--</select></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVC" ng-currency></td>-->
+        <!--<td><input class="form-control"-->
+        <!--ng-model="discSVCpercent"></td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="col-lg-12">
+            <!--<div class="col-lg-2">-->
+            <div class="button">
+                <button class="btn btn-primary" ng-click="addRow()">Add Row</button>
+                <div style="float: right" class="form-group">
+                    <label for="itTrain">IT Training:</label>
+                    <input type="number" id="itTrain" ng-model="itTraining">
+                </div>
+            </div>
+            <table class="table table-hover table-bordered table-condensed ">
+                <tr>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">Connexall Client</th>
+                    <th rowspan="2"> Clients</th>
+                    <th rowspan="2">Quantity</th>
+                    <th rowspan="2" colspan="2">Notes</th>
+                    <th rowspan="2">Software Cost</th>
+                    <th style="width: 120px">Labor</th>
+                    <th style="width: 120px">Workflow</th>
+                    <th style="width: 120px">Training</th>
+                    <th style="width: 120px">GoLive</th>
+                    <th style="width: 120px">Customization</th>
+                </tr>
+                <tr>
+                    <td>Total: <br> {{sumDays()}}</td>
+                    <td>Total: <br> {{sumDaysWorkflow()}}</td>
+                    <td>Total: <br> {{sumDaysTraining()}}</td>
+                    <td>Total: <br> {{sumDaysGoLive()}}</td>
+                    <td>Total: <br> {{sumCustomUnits()}}</td>
+                </tr>
+                <tr ng-repeat="row in rows">
+                    <td align="center">{{row.id}}</td>
+                    <td align="center">{{row.selectedItem.clientType}}</td>
+                    <td align="center"><select class="form-control" ng-model="row.selectedItem"
+                                               ng-options="item.software
+                                               for item in products"
+                                               ng-change="setProduct(row)">
+                        <option value="">Select Client</option>
+                    </select></td>
+                    <td align="center"><input class="form-control" style="width: 75px" ng-model="row.quantity"
+                                              ng-change="calcPrice(row)"
+                                              type='number'></td>
+                    <td align="center"><input class="form-control" style="width: 75px" ng-model="row.locations"
+                                              ng-change="calcLabor(row)" type='number'>
+                    </td>
+                    <td align="center"><textarea class="form-control" style="resize:none" rows="2" cols="20"
+                                                 ng-model="row.notes"></textarea></td>
+                    <td align="center" style="width: 110px"><input class="form-control" style="width: 110px"
+                                                                   ng-model="row.cost" ng-currency></td>
+                    <td align="center">
+                        <input class="form-control"  ng-model="row.labor" string-to-number
+                               type='number'>
+                        <div style="padding: 5px">
+                            <button href="" data-toggle="modal"
+                                    data-target="#image-modal" ng-click="imageShowModal(row,'Labor')">
+                                Edit Formula
+                            </button>
+                        </div>
+                    </td>
+                    <td align="center"><input class="form-control" ng-model="row.workflow"
+                                              type='number'>
+                        <div style="padding: 5px">
+                            <button href="" data-toggle="modal"
+                                    data-target="#image-modal" ng-click="imageShowModal(row,'Workflow')">
+                                Edit Formula
+                            </button>
+                        </div>
+                    </td>
+                    <td align="center"><input class="form-control" ng-model="row.userTraining"
+                                              type="number">
+                        <div style="padding: 5px">
+                            <button href="" data-toggle="modal"
+                                    data-target="#image-modal" ng-click="imageShowModal(row,'Training')">
+                                Edit Formula
+                            </button>
+                        </div></td>
+                    <td align="center"><input class="form-control" ng-model="row.goLive"
+                                              type="number">
+                        <div style="padding: 5px">
+                            <button href="" data-toggle="modal"
+                                    data-target="#image-modal" ng-click="imageShowModal(row,'goLive')">
+                                Edit Formula
+                            </button>
+                        </div></td>
+                    <td align="center"><input class="form-control" ng-model="row.custom"
+                                              type="number">
+                        <div style="padding: 5px">
+                            <button href="" data-toggle="modal"
+                                    data-target="#image-modal" ng-click="imageShowModal(row,'Customization')">
+                                Edit Formula
+                            </button>
+                        </div></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="button">
+                <button class="btn btn-primary" ng-click="addThirdPartyRow()">Add Row</button>
+            </div>
+            <table class="table table-hover table-bordered table-condensed ">
+                <tr>
+                    <th colspan="6">3rd Party</th>
+                </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Clients</th>
+                    <th>Quantity</th>
+                    <th colspan="2">Notes</th>
+                    <th>Software Cost</th>
+                </tr>
+
+                <tr ng-repeat="line in thirdPartyrows">
+                    <td align="center">{{line.id}}</td>
+                    <td align="center"><select class="form-control" ng-model="line.selectedHardware"
+                                               ng-options="item.hardware
+                                               for item in thirdPartyData"
+                                               ng-change="setHardware(line)">
+                        <option value="">Select Client</option>
+                    </select></td>
+                    <td align="center"><input class="form-control" style="width: 75px" ng-model="line.quantity"
+                                              ng-change="calcThirdPartyPrice(line)"
+                                              type='number'></td>
+                    <td align="center" style="width: 75px"><input class="form-control"  ng-model="line.locations"
+                                              type='number'>
+                    </td>
+                    <td align="center"><textarea class="form-control" style="resize:none" rows="2" cols="20"
+                                                 ng-model="line.notes"></textarea></td>
+                    <td align="center" style="width: 110px"><input class="form-control"
+                                                                   ng-model="line.cost" ng-currency></td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div class="col-lg-12">
+            <table class="table table-hover table-bordered table-condensed ">
+                <tr>
+                    <th colspan="5">Professional Services</th>
+                </tr>
+                <tr>
+                    <td style="width: 150px"><b>Customization</b></td>
+                    <td style="width: 190px">
+                        <select class="form-control" ng-model="includeCustom">
+                            <option value="" hidden>Select Choice</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </td>
+                    <td>{{units}} units</td>
+                    <td>Customization Cost</td>
+                    <td style="width: 190px">{{customPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>High Availability</b></td>
+                    <td>
+                        <select class="form-control" ng-model="haOption">
+                            <option value="" hidden>Select Choice</option>
+                            <option value="1">Yes</option>
+                            <option value="2">Yes Enterprise</option>
+                            <option value="0">No</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>High Availability Cost</td>
+                    <td>{{haPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>Role Based</b></td>
+                    <td>
+                        <select class="form-control" ng-model="roleBased">
+                            <option value="" hidden>Select Choice</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>SMA Cost</td>
+                    <td>{{smaPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>Labour</b></td>
+                    <td>
+                        {{totalLaborDays()}} days
+                    </td>
+                    <td></td>
+                    <td>Install Days Cost</td>
+                    <td>{{installPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>Optional Labour</b></td>
+                    <td>
+                        <input class="form-control" type='number'>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Workflow</b></td>
+                    <td>
+                        {{workflowDays}} days
+                    </td>
+                    <td></td>
+                    <td>Workflow Cost</td>
+                    <td>{{workflowPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>PM</b></td>
+                    <td>
+                        <select class="form-control" ng-model="pm">
+                            <option value="" hidden>Select Choice</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>PM Cost</td>
+                    <td>{{pmPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>User Training</b></td>
+                    <td>
+                        {{userTrainingDays}} days
+                    </td>
+                    <td></td>
+                    <td>Training Cost</td>
+                    <td>{{trainingPrice()|currency}}</td>
+                </tr>
+                <tr>
+                    <td><b>Admin Training</b></td>
+                    <td>
+                        {{itTraining|number:0}} days
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>L&T Expenses</b></td>
+                    <td>
+                        <select class="form-control" ng-model="liveTravel">
+                            <option value="" hidden>Select Choice</option>
+                            <option value="0">Remote and Onsite</option>
+                            <option value="1">Remote Only</option>
+                            <option value="2">Local</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td>Travel Estimate
+                        <div ng-show="liveTravel==0">{{visitDays()}}</div>
+                    </td>
+                    <td>{{visitPrice()}}</td>
+                </tr>
+                <tr>
+                    <td><b>Go Live Support</b></td>
+                    <td>
+                        {{goLiveDays}} days
+                    </td>
+                    <td></td>
+                    <td>GoLive Cost</td>
+                    <td>{{goLivePrice()|currency}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

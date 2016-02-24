@@ -1,0 +1,44 @@
+<div class="modal fade" id="image-modal" ng-controller="imageController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b>Edit {{field}} Formula</b></h4>
+            </div>
+            <div class="modal-body">
+                <b>Default Formula:</b> item.configuration +((item.locations) / (item.learning))
+                <hr>
+                <p> Learning in: <input ng-model="item.learning" ng-change="eval(item.formula)" type='number'> per day
+                </p>
+                <p> Configuration of Client: <input ng-model="item.configuration" ng-change="eval(item.formula)"
+                                                    type='number'> per day</p>
+                <div> Add expression: <i class="fa fa-info-circle fa-lg blue-icon icon-right"
+                                         uib-tooltip="To show the list of available variables, type ' # '.
+                                         If you want to use the default formula, leave this field blank."
+                                         tooltip-placement="left"></i></div>
+                <textarea style="resize:none" rows="2" cols="78" ng-model="item.formula" contenteditable mentio
+                          mentio-typed-text="typedTerm"
+                          mentio-items="variables | filter:label:typedTerm "
+                          mentio-select="getVariableText(item)"
+                          ng-change="eval(item.formula)">
+                </textarea>
+
+                <p><b>Result:</b> <br>
+                <div style="width: 100%">{{ans}}
+                </div>
+                </p>
+                <div ng-show="error">Error: {{error}}</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="cancel()" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="updateFormula(item.formula)"
+                            data-dismiss="modal">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

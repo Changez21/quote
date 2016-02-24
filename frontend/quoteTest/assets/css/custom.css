@@ -1,0 +1,159 @@
+@media (min-width: 768px) {
+    body {
+        padding-top: 10px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    }
+
+    .navbar-fixed-top .navbar-brand {
+        padding: 10px 0;
+    }
+}
+.fa{
+    vertical-align: middle;
+}
+
+.header {
+    padding: 15px;
+    background-color: #337AB7;
+    text-align: center;
+}
+
+.button {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+}
+
+.buttonSave {
+    padding-top: 20px;
+    padding-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.buttonText {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+hr {
+    border: 0;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(128, 128, 128, 0.75), rgba(0, 0, 0, 0));
+}
+
+.buttonSend {
+    padding-left: 15px;
+
+}
+
+.today {
+    background-color: yellow;
+}
+
+.modal-header {
+    background-color: #337AB7;
+
+}
+
+.modal-title {
+    color: white;
+    font-weight: bold;
+}
+
+.modal-footer {
+    background-color: #f5f5f5;
+}
+
+.modal.content {
+    background-color: #f5f5f5;
+}
+
+.modal-dialog {
+    height: auto;
+}
+
+.preview {
+    height: 100px;
+    width: auto;
+    padding-bottom: 10px;
+}
+
+.green-icon {
+    color: #00d224;
+}
+
+.th {
+    text-align: center;
+}
+
+.icon-right {
+    position: static;
+    float: right;
+    margin-top: 3px;
+}
+
+.blue-icon {
+    font-size: 20px;
+    color: #337AB7;
+}
+
+.form-field {
+    /*width: 500px;*/
+    padding-top: 10px;
+}
+
+.discount{
+    background-color: #00aa00;
+}
+
+.form-fieldShort{
+    align-content: center;
+    width: 150px;
+    padding-top: 25px;
+}
+
+.col-lg-6 {
+    padding-bottom: 20px;
+}
+.col-lg-12{
+    padding: 2px;
+}
+
+table, th, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+th {
+    vertical-align: middle;
+    background-color: #efefef;
+}
+
+.totalTable {
+    padding-top: 30px;
+
+}
+
+h4{
+    vertical-align: middle;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    vertical-align: middle;!important;
+}
+
+    /*.estimate {*/
+    /*font-size: 16px;*/
+/*}*/
+
+.response-box {
+    padding: 5px;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: #337AB7;
+    margin: 5px;
+}
+
+
